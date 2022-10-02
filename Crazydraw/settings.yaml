@@ -1,0 +1,11 @@
+area_settings:
+  start_point:
+    - 0 #x
+    - 0 #y
+  paint_square_size: # size in meters
+    - 5 #x
+    - 4  #y
+
+trajectory_manager:
+  saves_directory: "saves"
+  scale_trajectory: 1 #default 1 -> 1000 px = 1m
