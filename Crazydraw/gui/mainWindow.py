@@ -10,8 +10,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Crazydraw")
 
         layout = QHBoxLayout()
-        layout.addWidget(paintMainWidget(settings.get_paint_size_scaled()[0], settings.get_paint_size_scaled()[1], settings.get_trajectory_path()))
-        layout.addWidget(FileManager(settings.get_trajectory_path()))
+        layout.addWidget(paintMainWidget(settings))
+        layout.addWidget(FileManagerMain(settings.get_trajectory_path()))
 
         widget = QWidget()
         widget.setLayout(layout)

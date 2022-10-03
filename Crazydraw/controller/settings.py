@@ -14,8 +14,6 @@ class SettingsParser:
             except yaml.YAMLError as exc:
                 print(exc)
 
-        self.get_paint_size_scaled()
-
     def get_paint_size_scaled(self):
 
         size = self.data["area_settings"]["paint_square_size"]

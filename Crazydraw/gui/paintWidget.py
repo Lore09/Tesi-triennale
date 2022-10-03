@@ -9,15 +9,16 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout
 from gui.custom_dialogs import *
 from datetime import datetime
+from controller import *
 
 
 class paintMainWidget(QWidget):
-    def __init__(self, xsize, ysize, saves_dir):
+    def __init__(self, settings):
         super().__init__()
         pagelayout = QVBoxLayout()
         toolbar = QtWidgets.QToolBar()
         toolbar.setStyleSheet("QToolBar{spacing:30px;}");
-        paint_widget = paint(xsize, ysize, saves_dir)
+        paint_widget = paint(settings)
 
         pagelayout.addWidget(toolbar)
         pagelayout.addWidget(paint_widget)
@@ -35,21 +36,51 @@ class paintMainWidget(QWidget):
 
 
 class paint(QtWidgets.QLabel):
-    def __init__(self, xsize, ysize, saves_dir):
+    def __init__(self, settings):
         super().__init__()
 
         self.csv_file = None
         self.file_writer = None
-        self.saves_dir = QDir.currentPath() + "/" + saves_dir
+        self.saves_dir = QDir.currentPath() + "/" + settings.get_trajectory_path()
+        self.settings = settings
 
-        self.canvas = QtGui.QPixmap(xsize, ysize)
+        self.canvas = QtGui.QPixmap(settings.get_paint_size_scaled()[0], settings.get_paint_size_scaled()[1])
         self.clear_all()
+        self.paint_grid()
 
         self.last_x, self.last_y, self.start_time = None, None, None
+
+    def paint_grid(self):
+
+        x_size, y_size = self.settings.get_area_size_meters()
+        x_widget, y_widget = self.settings.get_paint_size_scaled()
+
+        y_dist = int(y_widget / y_size)
+        x_dist = int(x_widget / x_size)
+
+        painter = QtGui.QPainter(self.pixmap())
+        pen = painter.pen()
+        pen.setWidth(1)
+        painter.setPen(pen)
+
+        # vertical lines
+        index = 0
+        while index < x_widget:
+            index += x_dist
+            painter.drawLine(index, 0, index, y_widget)
+
+        # vertical lines
+        index = 0
+        while index < y_widget:
+            index += y_dist
+            painter.drawLine(0, index, x_widget, index)
+
+        painter.end()
 
     def clear_all(self):
         self.canvas.fill(QtGui.QColor("white"))
         self.setPixmap(self.canvas)
+        self.paint_grid()
 
         # Init file save
         if not os.path.isdir(self.saves_dir):
@@ -87,8 +118,6 @@ class paint(QtWidgets.QLabel):
             self.file_writer = csv.writer(self.csv_file)
             self.file_writer.writerow(["x", "y", "time"])
 
-
-
     def mouseMoveEvent(self, e):
 
         if self.last_x is None:  # First event.
@@ -113,4 +142,3 @@ class paint(QtWidgets.QLabel):
         self.last_y = e.y()
 
         self.file_writer.writerow([str(self.last_x), str(self.last_y), str(time.time() - self.start_time)])
-
