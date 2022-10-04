@@ -23,7 +23,7 @@ class paintMainWidget(QWidget):
         pagelayout.addWidget(toolbar)
         pagelayout.addWidget(paint_widget)
 
-        bttn_clear = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/icons8-clear-64.png"), "Clear", self)
+        bttn_clear = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/icons8-clear-58.png"), "Clear", self)
         bttn_clear.clicked.connect(paint_widget.clear_all)
 
         bttn_save = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/icons8-save-64.png"), "Save", self)

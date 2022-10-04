@@ -10,7 +10,7 @@ settings = SettingsParser()
 window = MainWindow(settings)
 window.setFixedSize(settings.get_paint_size_scaled()[0] + 500, 800)
 
-apply_stylesheet(app, theme='dark_blue.xml')
+apply_stylesheet(app, theme='dark_red.xml')
 
 window.show()
 
