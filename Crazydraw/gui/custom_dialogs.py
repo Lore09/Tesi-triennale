@@ -21,4 +21,5 @@ class SaveDialog(QDialog):
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
         self.setFixedSize(350,150)
+        self.setWindowTitle("Salva la traiettoria")
 
