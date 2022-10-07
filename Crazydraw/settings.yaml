@@ -3,7 +3,7 @@ area_settings:
     - 0 #x
     - 0 #y
   paint_square_size: # size in meters
-    - 4 #x
+    - 6 #x
     - 4  #y
 
 trajectory_manager:

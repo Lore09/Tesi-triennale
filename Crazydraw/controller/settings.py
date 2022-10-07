@@ -31,3 +31,16 @@ class SettingsParser:
     def get_trajectory_path(self):
         path = self.data["trajectory_manager"]["saves_directory"]
         return path
+
+    def get_scale_factor(self):
+
+        x_size, y_size = self.get_area_size_meters()
+        x_widget, y_widget = self.get_paint_size_scaled()
+
+        y_dist = int(y_widget / y_size)
+        x_dist = int(x_widget / x_size)
+
+        if x_dist == y_dist:
+            return x_dist
+        else:
+            return 0

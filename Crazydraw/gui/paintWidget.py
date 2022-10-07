@@ -39,6 +39,7 @@ class paint(QtWidgets.QLabel):
     def __init__(self, settings):
         super().__init__()
 
+        self.scale_size = settings.get_scale_factor()
         self.csv_file = None
         self.file_writer = None
         self.saves_dir = QDir.currentPath() + "/" + settings.get_trajectory_path()
@@ -52,11 +53,7 @@ class paint(QtWidgets.QLabel):
 
     def paint_grid(self):
 
-        x_size, y_size = self.settings.get_area_size_meters()
         x_widget, y_widget = self.settings.get_paint_size_scaled()
-
-        y_dist = int(y_widget / y_size)
-        x_dist = int(x_widget / x_size)
 
         painter = QtGui.QPainter(self.pixmap())
         pen = painter.pen()
@@ -66,13 +63,13 @@ class paint(QtWidgets.QLabel):
         # vertical lines
         index = 0
         while index < x_widget:
-            index += x_dist
+            index += self.scale_size
             painter.drawLine(index, 0, index, y_widget)
 
         # vertical lines
         index = 0
         while index < y_widget:
-            index += y_dist
+            index += self.scale_size
             painter.drawLine(0, index, x_widget, index)
 
         painter.end()
@@ -141,4 +138,4 @@ class paint(QtWidgets.QLabel):
         self.last_x = e.x()
         self.last_y = e.y()
 
-        self.file_writer.writerow([str(self.last_x), str(self.last_y), str(time.time() - self.start_time)])
+        self.file_writer.writerow([str(self.last_x * 1000 / self.scale_size), str(self.last_y * 1000 / self.scale_size), str(time.time() - self.start_time)])

@@ -24,6 +24,7 @@ class FileManagerMain(QWidget):
         self.bttn_delete = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/icons8-delete-64.png"), "", self)
         self.bttn_delete.clicked.connect(self.delete_file)
         self.bttn_delete.setDisabled(True)
+        self.bttn_delete.setFixedSize(60,100)
 
         toolbar.addWidget(self.bttn_delete)
 
