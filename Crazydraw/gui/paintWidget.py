@@ -111,8 +111,8 @@ class paint(QtWidgets.QLabel):
             new_file = self.saves_dir + "/" + filename
             os.rename(old_file, new_file)
 
-            self.csv_file = open(self.saves_dir + "/" + "tmp.csv", mode='w')
-            self.file_writer = csv.writer(self.csv_file)
+            self.csv_file = open(self.saves_dir + "/" + "tmp.csv", mode='+w', newline='', encoding='utf-8')
+            self.file_writer = csv.writer(self.csv_file, quoting=csv.QUOTE_NONE, quotechar='',  lineterminator='\n')
             self.file_writer.writerow(["x", "y", "time"])
 
     def mouseMoveEvent(self, e):
