@@ -13,8 +13,6 @@ window.setFixedSize(settings.get_paint_size_scaled()[0] + 500, 800)
 
 apply_stylesheet(app, theme='dark_red.xml')
 
-DrawSpline.plot_cubic_spline("saves/palle.csv")
-
 window.show()
 
 app.exec_()
