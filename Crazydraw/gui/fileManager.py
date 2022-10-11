@@ -13,24 +13,25 @@ class FileManagerMain(QWidget):
 
         self.selected_file = None
         self.tmp_file = QDir.currentPath() + "/" + rel_path + "/tmp.csv"
-        pagelayout = QHBoxLayout()
+        pagelayout = QVBoxLayout()
         toolbar = QtWidgets.QToolBar()
         toolbar.setStyleSheet("QToolBar{spacing:5px;}")
         self.file_manager_widget = FileManager(rel_path)
         self.file_manager_widget.treeview.clicked.connect(self.on_clicked)
 
-        pagelayout.addWidget(self.file_manager_widget)
         pagelayout.addWidget(toolbar)
+        pagelayout.addWidget(self.file_manager_widget)
+
 
         self.bttn_delete = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/icons8-delete-64.png"), "", self)
         self.bttn_delete.clicked.connect(self.delete_file)
         self.bttn_delete.setDisabled(True)
-        self.bttn_delete.setFixedSize(60,100)
+        self.bttn_delete.setFixedSize(70,70)
 
         self.bttn = QPushButton("SPLINE", self)
         self.bttn.clicked.connect(self.print_spline)
         self.bttn.setDisabled(True)
-        self.bttn.setFixedSize(60, 100)
+        self.bttn.setFixedHeight(70)
 
         toolbar.addWidget(self.bttn_delete)
         toolbar.addWidget(self.bttn)

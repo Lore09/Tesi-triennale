@@ -20,12 +20,12 @@ class DrawSpline:
         cs = CubicSpline(x, y)
         xs = np.arange(x[0], x[line_count - 2], 50)
         fig, ax = plt.subplots(figsize=(6.5, 4))
+        fig.canvas.manager.set_window_title("Cubic - Spline of " + csv_file_name)
         ax.plot(x, y, label='data')
-        ax.plot(xs, cs(xs), label="S")
-        ax.plot(xs, cs(xs, 1), label="S'")
-        ax.plot(xs, cs(xs, 2), label="S''")
-        ax.plot(xs, cs(xs, 3), label="S'''")
-        ax.set_xlim(-0.5, 4000)
+        ax.plot(xs, cs(xs), label="s(t)")
+        ax.plot(xs, cs(xs, 1), label="v(t)")
+        ax.plot(xs, cs(xs, 2), label="a(t)")
+        ax.set_xlim(x[0]-50, x[line_count - 2]+50)
         ax.legend(loc='lower left', ncol=2)
         plt.show()
 
@@ -47,12 +47,12 @@ class DrawSpline:
                     line_count += 1
                 else:
                     if len(row) != 0:
-                        print(row)
+                        #print(row)
                         if last_x < float(row[0]):
                             last_x = float(row[0])
                             x.append(round(float(row[0]), 2))
                             y.append(round(float(row[1]), 2))
                             line_count += 1
-            print(f'Processed {line_count} lines.')
+            #print(f'Processed {line_count} lines.')
 
             return x, y, line_count
