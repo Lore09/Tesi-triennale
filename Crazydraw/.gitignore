@@ -3,3 +3,5 @@
 saves
 venv
 Lib
+controller/__pycache__
+gui/__pycache__
