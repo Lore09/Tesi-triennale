@@ -1,7 +1,5 @@
 import os.path
-import csv
 import time
-
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
@@ -41,7 +39,6 @@ class paint(QtWidgets.QLabel):
 
         self.scale_size = settings.get_scale_factor()
         self.csv_file = None
-        self.file_writer = None
         self.saves_dir = QDir.currentPath() + "/" + settings.get_trajectory_path()
         self.settings = settings
 
@@ -87,8 +84,7 @@ class paint(QtWidgets.QLabel):
             self.csv_file.close()
 
         self.csv_file = open(self.saves_dir + "/" + "tmp.csv", mode='w')
-        self.file_writer = csv.writer(self.csv_file)
-        self.file_writer.writerow(["x", "y", "time"])
+        self.csv_file.write("x, y, time\n")
 
         self.csv_file.flush()
 
@@ -111,9 +107,8 @@ class paint(QtWidgets.QLabel):
             new_file = self.saves_dir + "/" + filename
             os.rename(old_file, new_file)
 
-            self.csv_file = open(self.saves_dir + "/" + "tmp.csv", mode='+w', newline='', encoding='utf-8')
-            self.file_writer = csv.writer(self.csv_file, quoting=csv.QUOTE_NONE, quotechar='',  lineterminator='\n')
-            self.file_writer.writerow(["x", "y", "time"])
+            self.csv_file = open(self.saves_dir + "/" + "tmp.csv", mode='w')
+            self.csv_file.write("x, y, time\n")
 
     def mouseMoveEvent(self, e):
 
@@ -137,5 +132,4 @@ class paint(QtWidgets.QLabel):
         # Update the origin for next time.
         self.last_x = e.x()
         self.last_y = e.y()
-
-        self.file_writer.writerow([str(self.last_x * 1000 / self.scale_size), str(self.last_y * 1000 / self.scale_size), str(time.time() - self.start_time)])
+        self.csv_file.write(f'{str(self.last_x * 1000 / self.scale_size)}, {str(self.last_y * 1000 / self.scale_size)}, {str(time.time() - self.start_time)}\n')
