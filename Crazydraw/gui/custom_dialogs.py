@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QLabel, QVBoxLayout, QLineEdit
+from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QLabel, QVBoxLayout, QLineEdit, QMessageBox
 
 
 class SaveDialog(QDialog):
@@ -23,3 +23,15 @@ class SaveDialog(QDialog):
         self.setFixedSize(350,150)
         self.setWindowTitle("Salva la traiettoria")
 
+class DeleteDialog(QMessageBox):
+    def __init__(self,filename):
+        super().__init__(None)
+
+        tmp = filename.split('/')
+        file_name = tmp[len(tmp) - 1]
+        message = f'Cancellare {file_name}?'
+
+        self.setWindowTitle(" ")
+        self.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        self.setIcon(QMessageBox.Question)
+        self.setText(message)

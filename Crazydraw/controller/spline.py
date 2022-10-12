@@ -22,22 +22,22 @@ class DrawSpline:
 
         try:
             spline_x = CubicSpline(t, x)
-            spline_y= CubicSpline(t, y)
+            spline_y = CubicSpline(t, y)
 
-            xs = np.arange(t[0], t[line_count - 2], float(t[line_count - 2]/10))
+            xs = np.arange(t[0], t[line_count - 1], float(t[line_count - 1] / 10))
 
             fig, ax = plt.subplots(2)
             fig.suptitle("Cubic - Spline of " + csv_file_name)
 
             ax[0].plot(t, x, label='data')
             ax[0].plot(xs, spline_x(xs), label="s(t)")
-            #ax[0].plot(xs, spline_x(xs, 1), label="v(t)")
-            #ax[0].plot(xs, spline_x(xs, 2), label="a(t)")
+            # ax[0].plot(xs, spline_x(xs, 1), label="v(t)")
+            # ax[0].plot(xs, spline_x(xs, 2), label="a(t)")
             ax[0].legend(loc='lower left', ncol=2)
 
             ax[1].plot(t, y, label='data')
             ax[1].plot(xs, spline_y(xs), label="s(t)")
-            #ax[1].plot(xs, spline_y(xs, 1), label="v(t)")
+            # ax[1].plot(xs, spline_y(xs, 1), label="v(t)")
             # ax[1].plot(xs, spline_y(xs, 2), label="a(t)")
             ax[1].legend(loc='lower left', ncol=2)
 
@@ -50,7 +50,7 @@ class DrawSpline:
 
         with open(csv_file_name, newline='', encoding='utf-8') as csv_file:
             csv_reader = csv.reader(csv_file)
-            line_count = 0
+            line_count = -1
             x = []
             y = []
             t = []
@@ -58,11 +58,11 @@ class DrawSpline:
             last_t = 0
 
             for row in csv_reader:
-                if line_count == 0:
-                    #print(f'Column names are {", ".join(row)}')
+                if line_count == -1:
+                    # print(f'Column names are {", ".join(row)}')
                     line_count += 1
                 else:
-                    #print(row)
+                    # print(row)
                     if float(row[2]) > last_t:
                         last_t = float(row[2])
                         x.append(round(float(row[0]), 3))

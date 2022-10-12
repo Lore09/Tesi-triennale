@@ -3,6 +3,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from controller.spline import DrawSpline
+from gui.custom_dialogs import DeleteDialog
 import os
 
 
@@ -52,8 +53,12 @@ class FileManagerMain(QWidget):
         DrawSpline.plot_cubic_spline(self.selected_file)
 
     def delete_file(self):
-        os.remove(self.selected_file)
-        self.bttn_delete.setDisabled(True)
+
+        dlg = DeleteDialog(self.selected_file)
+
+        if dlg.exec() == QMessageBox.Yes:
+            os.remove(self.selected_file)
+            self.bttn_delete.setDisabled(True)
 
 
 class FileManager(QWidget):
