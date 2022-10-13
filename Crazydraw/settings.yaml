@@ -6,6 +6,6 @@ area_settings:
     - 4 #x
     - 4  #y
 
-trajectory_manager:
-  saves_directory: "saves"
-  scale_trajectory: 1 #default 1 -> 1000 px = 1m
+data_storage:
+  trajectory_directory: "saves/trajectory"
+  polynomials_directory: "saves/poly"

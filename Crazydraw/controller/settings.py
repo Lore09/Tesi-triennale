@@ -29,8 +29,11 @@ class SettingsParser:
         return self.data["area_settings"]["paint_square_size"]
 
     def get_trajectory_path(self):
-        path = self.data["trajectory_manager"]["saves_directory"]
+        path = self.data["data_storage"]["trajectory_directory"]
         return path
+
+    def get_polynomials_path(self):
+        return self.data["data_storage"]["polynomials_directory"]
 
     def get_scale_factor(self):
 

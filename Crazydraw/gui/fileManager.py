@@ -59,6 +59,7 @@ class FileManagerMain(QWidget):
         if dlg.exec() == QMessageBox.Yes:
             os.remove(self.selected_file)
             self.bttn_delete.setDisabled(True)
+            self.bttn.setDisabled(True)
 
 
 class FileManager(QWidget):

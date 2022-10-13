@@ -1,4 +1,4 @@
-from scipy.interpolate import CubicSpline
+from scipy.interpolate import CubicSpline, PPoly
 import matplotlib.pyplot as plt
 import numpy as np
 import csv
@@ -15,21 +15,10 @@ class DrawSpline:
     def plot_cubic_spline(csv_file_name):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
-        tmp_x, tmp_y, tmp_t = [], [], []
 
         try:
-
-            xs = np.arange(0, line_count - 1, int((line_count - 1) / 35))
-            t_full = np.arange(0, t[line_count-1], t[line_count-1]/300)
-
-            for i in xs:
-                tmp_x.append(x[i])
-                tmp_y.append(y[i])
-                tmp_t.append(t[i])
-
-            x = np.array(tmp_x)
-            y = np.array(tmp_y)
-            t = np.array(tmp_t)
+            t_full = np.linspace(0, t[line_count - 1], 500)
+            x, y, t = DrawSpline.__get_data__(x, y, t, line_count,20)
 
             spline_x = CubicSpline(t, x)
             spline_y = CubicSpline(t, y)
@@ -39,17 +28,18 @@ class DrawSpline:
 
             ax[0].plot(t, x, 'o', label='data')
             ax[0].plot(t_full, spline_x(t_full), label="s(t)")
-            ax[0].plot(t_full, spline_x(t_full, 1), label="v(t)")
-            #ax[0].plot(t_full, spline_x(t_full, 2), label="a(t)")
+            #ax[0].plot(t_full, spline_x(t_full, 1), label="v(t)")
+            # ax[0].plot(t_full, spline_x(t_full, 2), label="a(t)")
             ax[0].legend(loc='lower left', ncol=2)
 
-            ax[1].plot(t, y, 'o',label='data')
+            ax[1].plot(t, y, 'o', label='data')
             ax[1].plot(t_full, spline_y(t_full), label="s(t)")
-            ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
-            #ax[1].plot(t_full, spline_y(t_full, 2), label="a(t)")
+            #ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
+            # ax[1].plot(t_full, spline_y(t_full, 2), label="a(t)")
             ax[1].legend(loc='lower left', ncol=2)
 
             plt.show()
+
         except:
             traceback.print_exc()
 
@@ -80,3 +70,28 @@ class DrawSpline:
             # print(f'Processed {line_count} lines.')
 
             return x, y, t, line_count
+
+    @staticmethod
+    def __get_data__(x, y, t, line_count,num_interpolation):
+
+        tmp_x, tmp_y, tmp_t = [], [], []
+
+        xs = np.arange(0, line_count - 1, int((line_count - 1) / num_interpolation))
+
+        for i in xs:
+            tmp_x.append(x[i])
+            tmp_y.append(y[i])
+            tmp_t.append(t[i])
+
+        return np.array(tmp_x), np.array(tmp_y), np.array(tmp_t)
+
+    @staticmethod
+    def print_poly_to_file(csv_file_name,output_file_name):
+
+        x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
+        x, y, t = DrawSpline.__get_data__(x, y, t, line_count)
+
+        spline_x = CubicSpline(t, x)
+        spline_y = CubicSpline(t, y)
+
+        #TODO finire la funzia che stampa
