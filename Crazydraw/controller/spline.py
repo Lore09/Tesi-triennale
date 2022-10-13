@@ -15,30 +15,38 @@ class DrawSpline:
     def plot_cubic_spline(csv_file_name):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
-
-        x = np.array(x)
-        y = np.array(y)
-        t = np.array(t)
+        tmp_x, tmp_y, tmp_t = [], [], []
 
         try:
+
+            xs = np.arange(0, line_count - 1, int((line_count - 1) / 35))
+            t_full = np.arange(0, t[line_count-1], t[line_count-1]/300)
+
+            for i in xs:
+                tmp_x.append(x[i])
+                tmp_y.append(y[i])
+                tmp_t.append(t[i])
+
+            x = np.array(tmp_x)
+            y = np.array(tmp_y)
+            t = np.array(tmp_t)
+
             spline_x = CubicSpline(t, x)
             spline_y = CubicSpline(t, y)
-
-            xs = np.arange(t[0], t[line_count - 1], float(t[line_count - 1] / 10))
 
             fig, ax = plt.subplots(2)
             fig.suptitle("Cubic - Spline of " + csv_file_name)
 
-            ax[0].plot(t, x, label='data')
-            ax[0].plot(xs, spline_x(xs), label="s(t)")
-            # ax[0].plot(xs, spline_x(xs, 1), label="v(t)")
-            # ax[0].plot(xs, spline_x(xs, 2), label="a(t)")
+            ax[0].plot(t, x, 'o', label='data')
+            ax[0].plot(t_full, spline_x(t_full), label="s(t)")
+            ax[0].plot(t_full, spline_x(t_full, 1), label="v(t)")
+            #ax[0].plot(t_full, spline_x(t_full, 2), label="a(t)")
             ax[0].legend(loc='lower left', ncol=2)
 
-            ax[1].plot(t, y, label='data')
-            ax[1].plot(xs, spline_y(xs), label="s(t)")
-            # ax[1].plot(xs, spline_y(xs, 1), label="v(t)")
-            # ax[1].plot(xs, spline_y(xs, 2), label="a(t)")
+            ax[1].plot(t, y, 'o',label='data')
+            ax[1].plot(t_full, spline_y(t_full), label="s(t)")
+            ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
+            #ax[1].plot(t_full, spline_y(t_full, 2), label="a(t)")
             ax[1].legend(loc='lower left', ncol=2)
 
             plt.show()
