@@ -132,4 +132,4 @@ class paint(QtWidgets.QLabel):
         # Update the origin for next time.
         self.last_x = e.x()
         self.last_y = e.y()
-        self.csv_file.write(f'{str(self.last_x * 1000 / self.scale_size)}, {str(self.last_y * 1000 / self.scale_size)}, {str(time.time() - self.start_time)}\n')
+        self.csv_file.write(f'{str(self.last_x * 1000 / self.scale_size)}, {str((700 - self.last_y) * 1000 / self.scale_size)}, {str(time.time() - self.start_time)}\n')

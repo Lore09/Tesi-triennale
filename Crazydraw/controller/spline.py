@@ -18,7 +18,7 @@ class DrawSpline:
 
         try:
             t_full = np.linspace(0, t[line_count - 1], 500)
-            x, y, t = DrawSpline.__get_data__(x, y, t, line_count,20)
+            x, y, t = DrawSpline.__get_data__(x, y, t, line_count, 20)
 
             spline_x = CubicSpline(t, x)
             spline_y = CubicSpline(t, y)
@@ -28,13 +28,13 @@ class DrawSpline:
 
             ax[0].plot(t, x, 'o', label='data')
             ax[0].plot(t_full, spline_x(t_full), label="s(t)")
-            #ax[0].plot(t_full, spline_x(t_full, 1), label="v(t)")
+            # ax[0].plot(t_full, spline_x(t_full, 1), label="v(t)")
             # ax[0].plot(t_full, spline_x(t_full, 2), label="a(t)")
             ax[0].legend(loc='lower left', ncol=2)
 
             ax[1].plot(t, y, 'o', label='data')
             ax[1].plot(t_full, spline_y(t_full), label="s(t)")
-            #ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
+            # ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
             # ax[1].plot(t_full, spline_y(t_full, 2), label="a(t)")
             ax[1].legend(loc='lower left', ncol=2)
 
@@ -72,7 +72,7 @@ class DrawSpline:
             return x, y, t, line_count
 
     @staticmethod
-    def __get_data__(x, y, t, line_count,num_interpolation):
+    def __get_data__(x, y, t, line_count, num_interpolation):
 
         tmp_x, tmp_y, tmp_t = [], [], []
 
@@ -86,7 +86,7 @@ class DrawSpline:
         return np.array(tmp_x), np.array(tmp_y), np.array(tmp_t)
 
     @staticmethod
-    def print_poly_to_file(csv_file_name,output_file_name):
+    def print_poly_to_file(csv_file_name, output_file_name):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
         x, y, t = DrawSpline.__get_data__(x, y, t, line_count)
@@ -94,4 +94,4 @@ class DrawSpline:
         spline_x = CubicSpline(t, x)
         spline_y = CubicSpline(t, y)
 
-        #TODO finire la funzia che stampa
+        # TODO finire la funzia che stampa
