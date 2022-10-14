@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 from gui.fileManager import *
 from gui.paintWidget import *
 import controller.utils as util
+import gui.splineWidget
 
 
 class MainWindow(QMainWindow):
@@ -41,7 +42,16 @@ class SplineWindow(QWidget):
         super(SplineWindow, self).__init__()
 
         layout = QHBoxLayout()
-        # layout.addWidget(util.get_trajectory_plot())
-        layout.addWidget(FileManagerSpline(settings.get_trajectory_path()))
+
+        self.file_manager = FileManagerSpline(settings.get_trajectory_path())
+        self.spline_widget = SplineWidget()
+
+        self.file_manager.bttn_spline.clicked.connect(self.plot_spline)
+
+        layout.addWidget(self.file_manager)
+        layout.addWidget(self.spline_widget)
 
         self.setLayout(layout)
+
+    def plot_spline(self):
+        self.spline_widget.plot_spline(self.file_manager.selected_file)

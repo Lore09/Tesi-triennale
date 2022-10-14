@@ -1,3 +1,5 @@
+import os
+
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
@@ -5,7 +7,7 @@ from PyQt5.QtCore import *
 from controller.spline import DrawSpline
 from gui.custom_dialogs import DeleteDialog
 from controller.utils import *
-import os
+from gui.splineWidget import SplineWidget
 
 
 class FileManager(QWidget):
@@ -98,5 +100,29 @@ class FileManagerSpline(FileManagerMain):
     def __init__(self, rel_path):
         super().__init__(rel_path)
 
-    def print_spline(self):
-        DrawSpline.plot_cubic_spline(self.selected_file)
+        self.bttn_spline = QPushButton("SPLINE", self)
+        self.bttn_spline.setDisabled(True)
+        self.bttn_spline.setFixedHeight(70)
+        self.toolbar.addWidget(self.bttn_spline)
+
+        self.bttn_delete.clicked.connect(self.delete_file)
+        self.file_manager_widget.treeview.clicked.connect(self.on_clicked)
+
+    def delete_file(self):
+
+        dlg = DeleteDialog(self.selected_file)
+
+        if dlg.exec() == QMessageBox.Yes:
+            os.remove(self.selected_file)
+            self.bttn_delete.setDisabled(True)
+            self.bttn_spline.setDisabled(True)
+
+    def on_clicked(self, index):
+        self.selected_file = self.file_manager_widget.dirModel.fileInfo(index).absoluteFilePath()
+
+        if self.selected_file == self.tmp_file:
+            self.bttn_delete.setDisabled(True)
+            self.bttn_spline.setDisabled(True)
+        else:
+            self.bttn_delete.setDisabled(False)
+            self.bttn_spline.setDisabled(False)

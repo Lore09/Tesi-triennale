@@ -12,7 +12,7 @@ class DrawSpline:
         self.x, self.y = None, None
 
     @staticmethod
-    def plot_cubic_spline(csv_file_name):
+    def plot_cubic_spline(csv_file_name,figure,ax):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
 
@@ -23,8 +23,7 @@ class DrawSpline:
             spline_x = CubicSpline(t, x)
             spline_y = CubicSpline(t, y)
 
-            fig, ax = plt.subplots(2)
-            fig.suptitle("Cubic - Spline of " + csv_file_name)
+            figure.suptitle("Cubic - Spline of " + csv_file_name)
 
             ax[0].plot(t, x, 'o', label='data')
             ax[0].plot(t_full, spline_x(t_full), label="s(t)")
@@ -37,8 +36,6 @@ class DrawSpline:
             # ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
             # ax[1].plot(t_full, spline_y(t_full, 2), label="a(t)")
             ax[1].legend(loc='lower left', ncol=2)
-
-            plt.show()
 
         except:
             traceback.print_exc()
