@@ -21,7 +21,7 @@ class FileManager(QWidget):
 
         self.dirModel = QFileSystemModel()
         self.dirModel.setRootPath(QDir.rootPath())
-        self.dirModel.setFilter(QDir.NoDotAndDotDot | QDir.Files)
+        self.dirModel.setFilter(QDir.NoDotAndDotDot | QDir.Files |QDir.Writable | QDir.Readable)
 
         self.treeview.setModel(self.dirModel)
         self.treeview.setRootIndex(self.dirModel.index(path))
@@ -35,7 +35,7 @@ class FileManagerMain(QWidget):
         super().__init__()
 
         self.selected_file = None
-        self.tmp_file = QDir.currentPath() + "/" + rel_path + "/tmp.csv"
+        self.tmp_file = QDir.currentPath() + "/" + rel_path + "/.tmp.csv"
         self.pagelayout = QVBoxLayout()
         self.toolbar = QtWidgets.QToolBar()
         self.toolbar.setStyleSheet("QToolBar{spacing:5px;}")

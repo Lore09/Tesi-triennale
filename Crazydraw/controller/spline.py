@@ -12,7 +12,7 @@ class DrawSpline:
         self.x, self.y = None, None
 
     @staticmethod
-    def plot_cubic_spline(csv_file_name,figure,ax):
+    def plot_cubic_spline(csv_file_name, figure, ax):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
 
@@ -23,19 +23,29 @@ class DrawSpline:
             spline_x = CubicSpline(t, x)
             spline_y = CubicSpline(t, y)
 
-            figure.suptitle("Cubic - Spline of " + csv_file_name)
+            tmp = csv_file_name.split('/')
+            file_name = tmp[len(tmp) - 1]
+            message = f'Cubic - Spline of {file_name}'
 
-            ax[0].plot(t, x, 'o', label='data')
-            ax[0].plot(t_full, spline_x(t_full), label="s(t)")
-            # ax[0].plot(t_full, spline_x(t_full, 1), label="v(t)")
-            # ax[0].plot(t_full, spline_x(t_full, 2), label="a(t)")
+            figure.suptitle(message)
+
+            x1, = ax[0].plot(t, x, 'o', label='data')
+            x2, = ax[0].plot(t_full, spline_x(t_full), label="s(t)")
+            x3, = ax[0].plot(t_full, spline_x(t_full, 1), label="v(t)")
+            x4, = ax[0].plot(t_full, spline_x(t_full, 2), label="a(t)")
             ax[0].legend(loc='lower left', ncol=2)
+            ax[0].set_ylabel("x")
+            ax[0].set_xlabel("t (seconds)")
 
-            ax[1].plot(t, y, 'o', label='data')
-            ax[1].plot(t_full, spline_y(t_full), label="s(t)")
-            # ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
-            # ax[1].plot(t_full, spline_y(t_full, 2), label="a(t)")
+            y1, = ax[1].plot(t, y, 'o', label='data')
+            y2, = ax[1].plot(t_full, spline_y(t_full), label="s(t)")
+            y3, = ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
+            y4, = ax[1].plot(t_full, spline_y(t_full, 2), label="a(t)")
             ax[1].legend(loc='lower left', ncol=2)
+            ax[1].set_ylabel("y")
+            ax[1].set_xlabel("t (seconds)")
+
+            return [x1, x2, x3, x4], [y1, y2, y3, y4]
 
         except:
             traceback.print_exc()

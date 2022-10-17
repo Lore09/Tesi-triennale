@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets, QtCore
 from matplotlib.figure import Figure
 from controller.spline import DrawSpline
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+import numpy as np
 
 
 class GraphPreview(QWidget):
@@ -31,12 +32,11 @@ class GraphPreview(QWidget):
 
         self.setLayout(layout)
 
-    def __my_list_slider_valuechange__(self,index):
-        #update plot
+    def __my_list_slider_valuechange__(self, index):
+        # update plot
         self.update_plot(index)
 
-    def update_plot(self,max_time):
-
+    def update_plot(self, max_time):
         xdata = self.x[:max_time]
         ydata = self.y[:max_time]
 
@@ -52,3 +52,13 @@ class MplCanvas(FigureCanvasQTAgg):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
+
+
+def get_max_value(axes):
+    max_value = []
+
+    for ax in axes:
+        data = np.array(ax.get_ydata())
+        max_value.append(np.max(data))
+
+    return np.max(max_value)
