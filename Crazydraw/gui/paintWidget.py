@@ -91,7 +91,6 @@ class paint(QtWidgets.QLabel):
         self.last_x, self.last_y, self.start_time = None, None, None
 
     def save_data(self, s):
-        #TODO check file già esistente
 
         dlg = SaveDialog()
         result = dlg.exec()
@@ -106,6 +105,9 @@ class paint(QtWidgets.QLabel):
             self.csv_file.close()
             old_file = self.saves_dir + "/.tmp.csv"
             new_file = self.saves_dir + "/" + filename
+
+            if os.path.isfile(new_file):
+                os.remove(new_file)
             os.rename(old_file, new_file)
 
             self.csv_file = open(self.saves_dir + "/" + ".tmp.csv", mode='w')
