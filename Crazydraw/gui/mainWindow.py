@@ -49,6 +49,7 @@ class SplineWindow(QWidget):
         self.spline_widget = SplineWidget()
 
         self.file_manager.bttn_spline.clicked.connect(self.plot_spline)
+        self.file_manager.bttn_save.clicked.connect(self.save_spline)
 
         layout.addWidget(self.file_manager)
         layout.addWidget(self.spline_widget)
@@ -56,5 +57,9 @@ class SplineWindow(QWidget):
         self.setLayout(layout)
 
     def plot_spline(self):
-        util.DrawSpline.print_poly_to_file(self.file_manager.selected_file, QDir.currentPath() + "/"+self.settings.get_polynomials_path()+"/prova_poly.csv",10)
         self.spline_widget.plot_spline(self.file_manager.selected_file)
+
+    def save_spline(self):
+        self.spline_widget.save_spline(self.file_manager.selected_file,
+                                           self.settings.get_polynomials_path(),
+                                           10)

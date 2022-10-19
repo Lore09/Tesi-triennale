@@ -105,6 +105,11 @@ class FileManagerSpline(FileManagerMain):
         self.bttn_spline.setFixedHeight(70)
         self.toolbar.addWidget(self.bttn_spline)
 
+        self.bttn_save = QPushButton("SAVE", self)
+        self.bttn_save.setDisabled(True)
+        self.bttn_save.setFixedHeight(70)
+        self.toolbar.addWidget(self.bttn_save)
+
         self.bttn_delete.clicked.connect(self.delete_file)
         self.file_manager_widget.treeview.clicked.connect(self.on_clicked)
 
@@ -116,6 +121,7 @@ class FileManagerSpline(FileManagerMain):
             os.remove(self.selected_file)
             self.bttn_delete.setDisabled(True)
             self.bttn_spline.setDisabled(True)
+            self.bttn_save.setDisabled(True)
 
     def on_clicked(self, index):
         self.selected_file = self.file_manager_widget.dirModel.fileInfo(index).absoluteFilePath()
@@ -123,6 +129,8 @@ class FileManagerSpline(FileManagerMain):
         if self.selected_file == self.tmp_file:
             self.bttn_delete.setDisabled(True)
             self.bttn_spline.setDisabled(True)
+            self.bttn_save.setDisabled(True)
         else:
             self.bttn_delete.setDisabled(False)
             self.bttn_spline.setDisabled(False)
+            self.bttn_save.setDisabled(False)

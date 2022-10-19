@@ -14,14 +14,14 @@ class SaveDialog(QDialog):
         self.layout = QVBoxLayout()
         message = QLabel("Nome file")
         self.filename = QLineEdit()
-        self.filename.setPlaceholderText("trajectory")
+        #self.filename.setPlaceholderText("trajectory")
 
         self.layout.addWidget(message)
         self.layout.addWidget(self.filename)
         self.layout.addWidget(self.buttonBox)
         self.setLayout(self.layout)
         self.setFixedSize(350,150)
-        self.setWindowTitle("Salva la traiettoria")
+        #self.setWindowTitle("Salva la traiettoria")
 
 class DeleteDialog(QMessageBox):
     def __init__(self,filename):

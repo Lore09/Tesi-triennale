@@ -4,6 +4,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationTool
 from controller.spline import DrawSpline
 from matplotlib.widgets import CheckButtons
 import controller.utils as utils
+from gui.custom_dialogs import SaveDialog
+from datetime import datetime
 
 
 class SplineWidget(QWidget):
@@ -100,6 +102,18 @@ class SplineWidget(QWidget):
             self.canvas.axes[1].set_ylim(-max_value, max_value)
 
         self.canvas.draw()
+
+    def save_spline(self, source_file, save_path, num_interpolation):
+
+        dlg = SaveDialog()
+        result = dlg.exec()
+
+        if result == 1:
+            filename = dlg.filename.text()
+            if filename == "":
+                filename = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
+            filename = "/"+ filename + "_poly.csv"
+            utils.DrawSpline.print_poly_to_file(source_file, save_path+filename, num_interpolation)
 
 
 class MplCanvasSpline(FigureCanvasQTAgg):
