@@ -29,7 +29,7 @@ class SplineWidget(QWidget):
             self.toolbar = NavigationToolbar(self.canvas)
 
             self.ax = []
-            x, y = DrawSpline.plot_cubic_spline(file_name, self.canvas.fig, self.canvas.axes)
+            x, y = DrawSpline.plot_cubic_spline(file_name, self.canvas.fig, self.canvas.axes, 10)
             self.ax.append(x)
             self.ax.append(y)
 

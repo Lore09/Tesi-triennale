@@ -14,13 +14,14 @@ class MainWindow(QMainWindow):
 
         tabs = QTabWidget()
         tabs.setTabPosition(QTabWidget.West)
-        tabs.setMovable(True)
 
         draw_window = DrawWindow(settings)
         spline_window = SplineWindow(settings)
 
         tabs.addTab(draw_window, "Draw")
         tabs.addTab(spline_window, "Spline")
+
+        #TODO editor settings
 
         self.setCentralWidget(tabs)
 
@@ -42,6 +43,7 @@ class SplineWindow(QWidget):
         super(SplineWindow, self).__init__()
 
         layout = QHBoxLayout()
+        self.settings = settings
 
         self.file_manager = FileManagerSpline(settings.get_trajectory_path())
         self.spline_widget = SplineWidget()
@@ -54,4 +56,5 @@ class SplineWindow(QWidget):
         self.setLayout(layout)
 
     def plot_spline(self):
+        util.DrawSpline.print_poly_to_file(self.file_manager.selected_file, QDir.currentPath() + "/"+self.settings.get_polynomials_path()+"/prova_poly.csv",10)
         self.spline_widget.plot_spline(self.file_manager.selected_file)

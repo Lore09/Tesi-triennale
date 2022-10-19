@@ -12,13 +12,13 @@ class DrawSpline:
         self.x, self.y = None, None
 
     @staticmethod
-    def plot_cubic_spline(csv_file_name, figure, ax):
+    def plot_cubic_spline(csv_file_name, figure, ax, num_interpolation):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
 
         try:
             t_full = np.linspace(0, t[line_count - 1], 500)
-            x, y, t = DrawSpline.__get_data__(x, y, t, line_count, 20)
+            x, y, t = DrawSpline.__get_data__(x, y, t, line_count, num_interpolation)
 
             spline_x = CubicSpline(t, x)
             spline_y = CubicSpline(t, y)
@@ -93,12 +93,31 @@ class DrawSpline:
         return np.array(tmp_x), np.array(tmp_y), np.array(tmp_t)
 
     @staticmethod
-    def print_poly_to_file(csv_file_name, output_file_name):
+    def print_poly_to_file(csv_file_name, output_file_name, num_interpolation):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
-        x, y, t = DrawSpline.__get_data__(x, y, t, line_count)
+        x, y, t = DrawSpline.__get_data__(x, y, t, line_count, num_interpolation)
 
         spline_x = CubicSpline(t, x)
         spline_y = CubicSpline(t, y)
 
-        # TODO finire la funzia che stampa
+        try:
+            csv_file = open(output_file_name, 'w')
+
+            csv_file.write('t_start, t_stop, ax^3, bx^2, cx, d, ay^3, by^2, cy, d\n')
+
+            for i in range(num_interpolation):
+
+                t_start = spline_x.x[i]
+                t_stop = spline_x.x[i+1]
+                x_poly = spline_x.c[:, i]
+                y_poly = spline_y.c[:, i]
+
+                csv_file.write(f'{t_start}, {t_stop}, {x_poly[0]}, {x_poly[1]}, {x_poly[2]}, {x_poly[3]}, {y_poly[0]}, {y_poly[1]}, {y_poly[2]}, {y_poly[3]}\n')
+
+            csv_file.flush()
+            csv_file.close()
+
+        except:
+            traceback.print_exc()
+
