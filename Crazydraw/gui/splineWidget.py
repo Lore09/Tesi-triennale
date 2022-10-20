@@ -10,13 +10,18 @@ from datetime import datetime
 
 class SplineWidget(QWidget):
 
-    def __init__(self):
+    def __init__(self,settings):
         super(SplineWidget, self).__init__()
         self.ax = None
         self.check = None
         self.toolbar = None
         self.canvas = None
         self.file_name = None
+        self.settings = settings
+
+        self.setMinimumWidth(int(settings.get_screen_res().width()*0.45))
+        self.setMaximumWidth(int(settings.get_screen_res().width() * 0.7))
+        self.setContentsMargins(5,5,5,5)
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
@@ -26,7 +31,7 @@ class SplineWidget(QWidget):
         if file_name is not None:
             self.layout.removeWidget(self.canvas)
             self.layout.removeWidget(self.toolbar)
-            self.canvas = MplCanvasSpline(width=10, height=10, dpi=100)
+            self.canvas = MplCanvasSpline()
 
             self.toolbar = NavigationToolbar(self.canvas)
 

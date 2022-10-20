@@ -7,6 +7,7 @@ from PyQt5.QtCore import QDir
 class SettingsParser:
     def __init__(self):
 
+        self.paint_widget_size = None
         with open(QDir.currentPath() + "/settings.yaml") as stream:
             try:
                 self.data = yaml.safe_load(stream)
@@ -14,15 +15,23 @@ class SettingsParser:
             except yaml.YAMLError as exc:
                 print(exc)
 
-    def get_paint_size_scaled(self):
+        self.screen_res = None
+
+    def get_screen_res(self):
+        return self.screen_res
+
+    def set_screen_res(self,screen_res):
+        self.screen_res = screen_res
 
         size = self.data["area_settings"]["paint_square_size"]
 
-        scale = []
-        scale.append(int(size[0] * 700 / size[1]))
-        scale.append(700)
+        self.paint_widget_size = []
+        self.paint_widget_size.append(int(size[0] * screen_res.height()*2/3 / size[1]))
+        self.paint_widget_size.append(int(screen_res.height()*2/3))
 
-        return scale
+    def get_paint_size_scaled(self):
+
+        return self.paint_widget_size
 
     def get_area_size_meters(self):
 

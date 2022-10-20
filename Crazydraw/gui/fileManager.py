@@ -26,7 +26,8 @@ class FileManager(QWidget):
         self.treeview.setModel(self.dirModel)
         self.treeview.setRootIndex(self.dirModel.index(path))
 
-        self.treeview.setFixedWidth(250)
+        self.treeview.setMinimumWidth(400)
+        self.treeview.setMaximumWidth(700)
 
 
 class FileManagerMain(QWidget):
@@ -44,9 +45,9 @@ class FileManagerMain(QWidget):
         self.pagelayout.addWidget(self.toolbar)
         self.pagelayout.addWidget(self.file_manager_widget)
 
-        self.bttn_delete = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/icons8-delete-64.png"), "", self)
+        self.bttn_delete = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/icons8-rimuovere-100.png"), "DELETE", self)
         self.bttn_delete.setDisabled(True)
-        self.bttn_delete.setFixedSize(70, 70)
+        self.bttn_delete.setFixedHeight(70)
         self.toolbar.addWidget(self.bttn_delete)
 
         self.setLayout(self.pagelayout)

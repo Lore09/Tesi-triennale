@@ -42,7 +42,11 @@ class paint(QtWidgets.QLabel):
         self.saves_dir = QDir.currentPath() + "/" + settings.get_trajectory_path()
         self.settings = settings
 
-        self.canvas = QtGui.QPixmap(settings.get_paint_size_scaled()[0], settings.get_paint_size_scaled()[1])
+        self.setFixedSize(settings.get_paint_size_scaled()[0], settings.get_paint_size_scaled()[1])
+
+        qsize = QSize(settings.get_paint_size_scaled()[0], settings.get_paint_size_scaled()[1])
+        self.canvas = QtGui.QPixmap(qsize)
+
         self.clear_all()
         self.paint_grid()
 
@@ -135,4 +139,4 @@ class paint(QtWidgets.QLabel):
         # Update the origin for next time.
         self.last_x = e.x()
         self.last_y = e.y()
-        self.csv_file.write(f'{str(self.last_x * 1000 / self.scale_size)}, {str((700 - self.last_y) * 1000 / self.scale_size)}, {str(time.time() - self.start_time)}\n')
+        self.csv_file.write(f'{str(self.last_x * 1000 / self.scale_size)}, {str((self.settings.get_screen_res().height()*2/3 - self.last_y) * 1000 / self.scale_size)}, {str(time.time() - self.start_time)}\n')

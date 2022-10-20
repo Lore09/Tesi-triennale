@@ -4,14 +4,22 @@ from controller.settings import SettingsParser
 from qt_material import apply_stylesheet
 from controller.spline import *
 
+extra = {
+    # Density Scale
+    'density_scale': '5',
+}
+
 app = QtWidgets.QApplication(sys.argv)
+screen_resolution = app.desktop().screenGeometry()
 
 settings = SettingsParser()
+settings.set_screen_res(screen_resolution)
 
 window = MainWindow(settings)
-window.setFixedSize(settings.get_paint_size_scaled()[0] + 500, 800)
+window.showMaximized()
+#window.setFixedSize(settings.get_paint_size_scaled()[0] + 500, 800)
 
-apply_stylesheet(app, theme='dark_red.xml')
+apply_stylesheet(app,theme='dark_red.xml',extra=extra)
 
 window.show()
 

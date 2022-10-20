@@ -31,8 +31,13 @@ class DrawWindow(QWidget):
         super(DrawWindow, self).__init__()
 
         layout = QHBoxLayout()
-        layout.addWidget(paintMainWidget(settings))
-        layout.addWidget(FileManagerDraw(settings.get_trajectory_path()))
+
+        paintWidget = paintMainWidget(settings)
+
+        fileManager= FileManagerDraw(settings.get_trajectory_path())
+
+        layout.addWidget(paintWidget)
+        layout.addWidget(fileManager)
 
         self.setLayout(layout)
 
@@ -46,7 +51,7 @@ class SplineWindow(QWidget):
         self.settings = settings
 
         self.file_manager = FileManagerSpline(settings.get_trajectory_path())
-        self.spline_widget = SplineWidget()
+        self.spline_widget = SplineWidget(settings)
 
         self.file_manager.bttn_spline.clicked.connect(self.plot_spline)
         self.file_manager.bttn_save.clicked.connect(self.save_spline)
