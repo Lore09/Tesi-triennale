@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 from gui.fileManager import *
 from gui.paintWidget import *
+from gui.settingsWindow import SettingsWidget
 import controller.utils as util
 import gui.splineWidget
 
@@ -17,9 +18,11 @@ class MainWindow(QMainWindow):
 
         draw_window = DrawWindow(settings)
         spline_window = SplineWindow(settings)
+        settings_window = SettingsWidget(settings)
 
         tabs.addTab(draw_window, "Draw")
         tabs.addTab(spline_window, "Spline")
+        tabs.addTab(settings_window, "Settings")
 
         #TODO editor settings
 
@@ -67,4 +70,4 @@ class SplineWindow(QWidget):
     def save_spline(self):
         self.spline_widget.save_spline(self.file_manager.selected_file,
                                            self.settings.get_polynomials_path(),
-                                           10)
+                                           30)

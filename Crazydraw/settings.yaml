@@ -1,10 +1,7 @@
 area_settings:
-  start_point:
-    - 0 #x
-    - 0 #y
   paint_square_size: # size in meters
-    - 6 #x
-    - 6  #y
+    - 4 #x
+    - 4  #y
 
 data_storage:
   trajectory_directory: "saves/trajectory"
