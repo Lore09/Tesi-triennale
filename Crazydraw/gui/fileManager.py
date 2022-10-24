@@ -17,14 +17,12 @@ class FileManager(QWidget):
         self.treeview = QListView()
         hlay.addWidget(self.treeview)
 
-        path = QDir.currentPath() + "/" + rel_path
-
         self.dirModel = QFileSystemModel()
         self.dirModel.setRootPath(QDir.rootPath())
         self.dirModel.setFilter(QDir.NoDotAndDotDot | QDir.Files |QDir.Writable | QDir.Readable)
 
         self.treeview.setModel(self.dirModel)
-        self.treeview.setRootIndex(self.dirModel.index(path))
+        self.treeview.setRootIndex(self.dirModel.index(rel_path))
 
         self.treeview.setMinimumWidth(400)
         self.treeview.setMaximumWidth(700)
@@ -36,7 +34,7 @@ class FileManagerMain(QWidget):
         super().__init__()
 
         self.selected_file = None
-        self.tmp_file = QDir.currentPath() + "/" + rel_path + "/.tmp.csv"
+        self.tmp_file = rel_path + "/.tmp.csv"
         self.pagelayout = QVBoxLayout()
         self.toolbar = QtWidgets.QToolBar()
         self.toolbar.setStyleSheet("QToolBar{spacing:5px;}")

@@ -39,7 +39,7 @@ class paint(QtWidgets.QLabel):
 
         self.scale_size = settings.get_scale_factor()
         self.csv_file = None
-        self.saves_dir = QDir.currentPath() + "/" + settings.get_trajectory_path()
+        self.saves_dir = settings.get_trajectory_path()
         self.settings = settings
 
         self.setFixedSize(settings.get_paint_size_scaled()[0], settings.get_paint_size_scaled()[1])
@@ -139,4 +139,4 @@ class paint(QtWidgets.QLabel):
         # Update the origin for next time.
         self.last_x = e.x()
         self.last_y = e.y()
-        self.csv_file.write(f'{str(self.last_x * 1000 / self.scale_size)}, {str((self.settings.get_screen_res().height()*2/3 - self.last_y) * 1000 / self.scale_size)}, {str(time.time() - self.start_time)}\n')
+        self.csv_file.write(f'{str(self.last_x  / self.scale_size)}, {str((self.settings.get_screen_res().height()*2/3 - self.last_y) / self.scale_size)}, {str(time.time() - self.start_time)}\n')

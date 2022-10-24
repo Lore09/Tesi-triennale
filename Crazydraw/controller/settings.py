@@ -1,5 +1,6 @@
 import yaml
 import io
+import os
 
 from PyQt5.QtCore import QDir
 
@@ -17,6 +18,14 @@ class SettingsParser:
 
         self.screen_res = None
 
+        self.trajectory_path = QDir.currentPath() + "/" + self.data["data_storage"]["trajectory_directory"]
+        self.polynomials_path = QDir.currentPath() + "/" + self.data["data_storage"]["polynomials_directory"]
+
+        if not os.path.isdir(self.trajectory_path):
+            os.makedirs(self.trajectory_path)
+
+        if not os.path.isdir(self.polynomials_path):
+            os.makedirs(self.polynomials_path)
     def get_screen_res(self):
         return self.screen_res
 
@@ -38,11 +47,10 @@ class SettingsParser:
         return self.data["area_settings"]["paint_square_size"]
 
     def get_trajectory_path(self):
-        path = self.data["data_storage"]["trajectory_directory"]
-        return path
+        return self.trajectory_path
 
     def get_polynomials_path(self):
-        return self.data["data_storage"]["polynomials_directory"]
+        return self.polynomials_path
 
     def get_scale_factor(self):
 
