@@ -5,3 +5,4 @@ venv
 Lib
 controller/__pycache__
 gui/__pycache__
+settings.yaml

@@ -1,8 +1,0 @@
-area_settings:
-  paint_square_size: # size in meters
-    - 4 #x
-    - 4  #y
-
-data_storage:
-  trajectory_directory: "saves/trajectory"
-  polynomials_directory: "saves/poly"
