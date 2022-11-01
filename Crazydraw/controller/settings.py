@@ -25,6 +25,8 @@ class SettingsParser:
 
         self.check_dirs()
 
+        self.enable_ros = bool(self.data["enable_ros"])
+
     def check_dirs(self):
 
         if os.path.isabs(self.data["data_storage"]["trajectory_directory"]):

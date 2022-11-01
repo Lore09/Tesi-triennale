@@ -1,13 +1,14 @@
 from PyQt5.QtCore import QDir, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QFileDialog, QSlider, \
-    QMessageBox
+    QMessageBox, QCheckBox
 
 
 class SettingsWidget(QWidget):
     def __init__(self, settings):
         super().__init__()
 
+        self.ros_checkbox = None
         self.polynomials_path_new = None
         self.trajectory_path_new = None
         self.size_info = None
@@ -25,6 +26,7 @@ class SettingsWidget(QWidget):
         self.layout.addWidget(self.get_trajectory_saves())
         self.layout.addWidget(self.get_polynomial_saves())
         self.layout.addWidget(self.get_size_meters())
+        self.layout.addWidget(self.get_ros_checkbox())
 
         self.bttn_save = QPushButton("SAVE SETTINGS", self)
         self.bttn_save.setFixedHeight(70)
@@ -123,9 +125,38 @@ class SettingsWidget(QWidget):
 
         return box
 
+    def get_ros_checkbox(self):
+        row = QWidget()
+        row_layout = QHBoxLayout()
+
+        label = QLabel("Enable ROS:")
+        self.ros_checkbox = QCheckBox()
+
+        if self.settings.enable_ros:
+            self.ros_checkbox.setChecked(True)
+            self.ros_checkbox.setText("Enabled")
+        else:
+            self.ros_checkbox.setChecked(False)
+            self.ros_checkbox.setText("Disabled")
+
+        self.ros_checkbox.stateChanged.connect(self.check_value_changed)
+
+        row_layout.addWidget(label)
+        row_layout.addWidget(self.ros_checkbox)
+
+        row.setLayout(row_layout)
+
+        return row
+
     def slider_value_changed(self):
         self.size_info[0].setText(str(self.size_value[0].value()))
         self.size_info[1].setText(str(self.size_value[1].value()))
+
+    def check_value_changed(self):
+        if self.ros_checkbox.isChecked():
+            self.ros_checkbox.setText("Enabled")
+        else:
+            self.ros_checkbox.setText("Disabled")
 
     def get_trajectory_file_dialog(self):
         self.trajectory_path_new = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
@@ -150,7 +181,7 @@ class SettingsWidget(QWidget):
         else:
             self.settings.polynomials_path_new = self.polynomials_path_new
 
-        self.settings.enable_ros_new = True
+        self.settings.enable_ros_new = self.ros_checkbox.isChecked()
 
         self.settings.save_data()
 
