@@ -9,14 +9,33 @@ from PyQt5.QtWidgets import QMessageBox
 class SettingsParser:
     def __init__(self):
 
-        self.data = {}
+        self.polynomials_path = None
+        self.trajectory_path = None
         self.paint_widget_size = None
         self.screen_res = None
+        self.enable_ros = None
+        self.data = {}
+
+        self.polynomials_path_new = None
+        self.trajectory_path_new = None
+        self.paint_size_meters_new = None
+        self.enable_ros_new = None
 
         self.check_settings_file()
 
-        self.trajectory_path = QDir.currentPath() + "/" + self.data["data_storage"]["trajectory_directory"]
-        self.polynomials_path = QDir.currentPath() + "/" + self.data["data_storage"]["polynomials_directory"]
+        self.check_dirs()
+
+    def check_dirs(self):
+
+        if os.path.isabs(self.data["data_storage"]["trajectory_directory"]):
+            self.trajectory_path = self.data["data_storage"]["trajectory_directory"]
+        else:
+            self.trajectory_path = QDir.currentPath() + "/" + self.data["data_storage"]["trajectory_directory"]
+
+        if os.path.isabs(self.data["data_storage"]["polynomials_directory"]):
+            self.polynomials_path = self.data["data_storage"]["polynomials_directory"]
+        else:
+            self.polynomials_path = QDir.currentPath() + "/" + self.data["data_storage"]["polynomials_directory"]
 
         if not os.path.isdir(self.trajectory_path):
             os.makedirs(self.trajectory_path)
@@ -38,7 +57,8 @@ class SettingsParser:
                     'data_storage': {
                         'trajectory_directory': 'saves/trajectory',
                         'polynomials_directory': 'saves/poly'
-                    }
+                    },
+                    'enable_ros': False
                 }
 
                 # Write YAML file
@@ -61,7 +81,6 @@ class SettingsParser:
                 stream.close()
                 os.remove(QDir.currentPath() + "/settings.yaml")
                 self.check_settings_file()
-
 
     def get_screen_res(self):
         return self.screen_res
@@ -101,3 +120,32 @@ class SettingsParser:
             return x_dist
         else:
             return 0
+    def save_data(self):
+
+        try:
+            data = {
+                'area_settings': {
+                    'paint_square_size': [
+                        self.paint_size_meters_new[0],
+                        self.paint_size_meters_new[1]
+                    ]
+                },
+                'data_storage': {
+                    'trajectory_directory': self.trajectory_path_new,
+                    'polynomials_directory': self.polynomials_path_new
+                },
+                'enable_ros': self.enable_ros_new
+            }
+
+            os.remove(QDir.currentPath() + "/settings.yaml")
+
+            # Write YAML file
+            with io.open('settings.yaml', 'w', encoding='utf8') as outfile:
+                yaml.dump(data, outfile, default_flow_style=False, allow_unicode=True)
+        except:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Mannagg")
+            msg.setInformativeText('Errore scrittura file settings.yaml')
+            msg.setWindowTitle("Aiuto")
+            msg.exec_()

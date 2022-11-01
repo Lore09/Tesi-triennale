@@ -1,6 +1,6 @@
 import matplotlib
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QSlider, QLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QSlider, QLayout, QLabel
 
 matplotlib.use('Qt5Agg')
 from PyQt5 import QtWidgets, QtCore
@@ -14,20 +14,24 @@ class GraphPreview(QWidget):
 
     def __init__(self, file_name):
         super().__init__()
-        self.x, self.y, t, linecount = DrawSpline.get_cords(file_name)
+        self.x, self.y, self.t, linecount = DrawSpline.get_cords(file_name)
 
         self.canvas = MplCanvas(width=10, height=10, dpi=100)
-        self.update_plot(len(t) - 1)
+        self.update_plot(len(self.t) - 1)
 
         # Create toolbar, passing canvas as first parament, parent (self, the MainWindow) as second.
-        slider = QSlider(orientation=Qt.Horizontal)
-        slider.setMaximum(len(t) - 1)
-        slider.setMinimum(0)
-        slider.valueChanged.connect(self.__my_list_slider_valuechange__)
-        slider.show()
+        self.slider = QSlider(orientation=Qt.Horizontal)
+        self.slider.setMaximum(len(self.t) - 1)
+        self.slider.setMinimum(0)
+        self.slider.valueChanged.connect(self.__my_list_slider_valuechange__)
+
+        self.label = QLabel()
+        self.label.setText("t = " + str(self.t[-1]))
+        self.label.setAlignment(Qt.AlignCenter)
 
         layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(slider)
+        layout.addWidget(self.label)
+        layout.addWidget(self.slider)
         layout.addWidget(self.canvas)
 
         self.setLayout(layout)
@@ -35,6 +39,7 @@ class GraphPreview(QWidget):
     def __my_list_slider_valuechange__(self, index):
         # update plot
         self.update_plot(index)
+        self.label.setText("t = " + str(self.t[index]))
 
     def update_plot(self, max_time):
         xdata = self.x[:max_time]
