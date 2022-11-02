@@ -184,8 +184,3 @@ class SettingsWidget(QWidget):
         self.settings.enable_ros_new = self.ros_checkbox.isChecked()
 
         self.settings.save_data()
-
-        dlg = QMessageBox(self)
-        dlg.setWindowTitle("O w o")
-        dlg.setText("Settings updated!")
-        dlg.exec()

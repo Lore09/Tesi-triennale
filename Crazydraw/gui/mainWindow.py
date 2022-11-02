@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 from gui.fileManager import *
 from gui.paintWidget import *
 from gui.settingsWindow import SettingsWidget
+from gui.rosWidget import *
 import controller.utils as util
 import gui.splineWidget
 
@@ -19,13 +20,13 @@ class MainWindow(QMainWindow):
 
         draw_window = DrawWindow(settings)
         spline_window = SplineWindow(settings)
+        ros_window = RosWindow(settings)
         settings_window = SettingsWidget(settings)
 
         tabs.addTab(draw_window, "Draw")
         tabs.addTab(spline_window, "Spline")
+        tabs.addTab(ros_window, "ROS")
         tabs.addTab(settings_window, "Settings")
-
-        #TODO editor settings
 
         self.setCentralWidget(tabs)
 
@@ -38,7 +39,7 @@ class DrawWindow(QWidget):
 
         paintWidget = paintMainWidget(settings)
 
-        fileManager= FileManagerDraw(settings.get_trajectory_path())
+        fileManager = FileManagerDraw(settings.get_trajectory_path())
 
         layout.addWidget(paintWidget)
         layout.addWidget(fileManager)
@@ -70,5 +71,23 @@ class SplineWindow(QWidget):
 
     def save_spline(self):
         self.spline_widget.save_spline(self.file_manager.selected_file,
-                                           self.settings.get_polynomials_path(),
-                                           30)
+                                       self.settings.get_polynomials_path(),
+                                       30)
+
+
+class RosWindow(QWidget):
+
+    def __init__(self, settings):
+        super(RosWindow, self).__init__()
+
+        layout = QHBoxLayout()
+        file_manager = FileManagerRos(settings.get_trajectory_path())
+        ros_widget = RosWidget()
+
+        layout.addWidget(file_manager)
+        layout.addWidget(ros_widget)
+
+        self.setLayout(layout)
+
+    def fly(self):
+        return

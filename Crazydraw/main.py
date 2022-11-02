@@ -1,8 +1,8 @@
 import sys
-from gui.mainWindow import *
+
 from controller.settings import SettingsParser
+from gui.mainWindow import *
 from qt_material import apply_stylesheet
-from controller.spline import *
 
 extra = {
     # Density Scale
@@ -12,15 +12,17 @@ extra = {
 app = QtWidgets.QApplication(sys.argv)
 screen_resolution = app.desktop().screenGeometry()
 
-settings = SettingsParser()
-settings.set_screen_res(screen_resolution)
+exit_code = 1
 
-window = MainWindow(settings)
-window.showMaximized()
-#window.setFixedSize(settings.get_paint_size_scaled()[0] + 500, 800)
+while exit_code == 1:
+    settings = SettingsParser(app)
+    settings.set_screen_res(screen_resolution)
 
-apply_stylesheet(app,theme='dark_teal.xml',extra=extra)
+    window = MainWindow(settings)
+    window.showMaximized()
 
-window.show()
+    apply_stylesheet(app, theme='dark_teal.xml', extra=extra)
 
-app.exec_()
+    window.show()
+    exit_code = app.exec_()
+    window.close()

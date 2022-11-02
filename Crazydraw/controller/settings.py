@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 
 class SettingsParser:
-    def __init__(self):
+    def __init__(self, app):
 
         self.polynomials_path = None
         self.trajectory_path = None
@@ -20,6 +20,8 @@ class SettingsParser:
         self.trajectory_path_new = None
         self.paint_size_meters_new = None
         self.enable_ros_new = None
+
+        self.app = app
 
         self.check_settings_file()
 
@@ -122,6 +124,7 @@ class SettingsParser:
             return x_dist
         else:
             return 0
+
     def save_data(self):
 
         try:
@@ -144,6 +147,15 @@ class SettingsParser:
             # Write YAML file
             with io.open('settings.yaml', 'w', encoding='utf8') as outfile:
                 yaml.dump(data, outfile, default_flow_style=False, allow_unicode=True)
+
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Settings Saved!")
+            msg.setInformativeText('Application is going to restart!')
+            msg.setWindowTitle("O w o")
+            msg.exec_()
+
+            self.app.exit(1)
         except:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
