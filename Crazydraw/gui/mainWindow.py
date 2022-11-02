@@ -12,6 +12,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         self.setWindowTitle("Crazydraw")
+        self.setWindowIcon(QtGui.QIcon(QDir.currentPath() + '/gui/res/icons/drone.png'))
 
         tabs = QTabWidget()
         tabs.setTabPosition(QTabWidget.West)
