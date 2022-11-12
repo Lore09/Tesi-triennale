@@ -58,7 +58,7 @@ class paint(QtWidgets.QLabel):
 
         painter = QtGui.QPainter(self.pixmap())
         pen = painter.pen()
-        pen.setWidth(1)
+        pen.setWidth(2)
         painter.setPen(pen)
 
         # vertical lines
@@ -72,6 +72,28 @@ class paint(QtWidgets.QLabel):
         while index < y_widget:
             index += self.scale_size
             painter.drawLine(0, index, x_widget, index)
+
+        # half - meter lines
+        # vertical lines
+        pen.setColor(QtGui.QColor("#6d737d"))
+        pen.setWidth(1)
+        painter.setPen(pen)
+        index = int(self.scale_size/-2)
+        while index < x_widget:
+            index += self.scale_size
+            painter.drawLine(index, 0, index, y_widget)
+
+        # vertical lines
+        index = int(self.scale_size/-2)
+        while index < y_widget:
+            index += self.scale_size
+            painter.drawLine(0, index, x_widget, index)
+
+        # Draw central point
+        pen.setColor(QtGui.QColor("#ff9d00"))
+        pen.setWidth(10)
+        painter.setPen(pen)
+        painter.drawPoint(int(x_widget/2), int(y_widget/2))
 
         painter.end()
 
