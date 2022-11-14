@@ -22,6 +22,9 @@ class SettingsWidget(QWidget):
         self.settings = settings
 
         self.layout = QVBoxLayout()
+        self.layout.setAlignment(Qt.AlignCenter)
+        self.layout.setSpacing(80)
+        self.layout.setContentsMargins(100,100,100,100)
 
         self.layout.addWidget(self.get_trajectory_saves())
         self.layout.addWidget(self.get_polynomial_saves())

@@ -140,7 +140,7 @@ class FileManagerRos(FileManagerMain):
     def __init__(self, rel_path):
         super().__init__(rel_path)
 
-        self.bttn_fly = QPushButton("FLY", self)
+        self.bttn_fly = QPushButton("SEND TRAJECTORY", self)
         self.bttn_fly.setDisabled(True)
         self.bttn_fly.setFixedHeight(70)
         self.toolbar.addWidget(self.bttn_fly)
