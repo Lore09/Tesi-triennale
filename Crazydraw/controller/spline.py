@@ -1,3 +1,5 @@
+import math
+
 from scipy.interpolate import CubicSpline, PPoly
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,7 +20,7 @@ class DrawSpline:
 
         try:
             t_full = np.linspace(0, t[line_count - 1], 500)
-            x, y, t = DrawSpline.__get_data__(x, y, t, line_count, num_interpolation)
+            x, y, t = DrawSpline.__distance_interpolation__(x, y, t, line_count, num_interpolation)
 
             spline_x = CubicSpline(t, x)
             spline_y = CubicSpline(t, y)
@@ -79,7 +81,7 @@ class DrawSpline:
             return x, y, t, line_count
 
     @staticmethod
-    def __get_data__(x, y, t, line_count, num_interpolation):
+    def __time_interpolation__(x, y, t, line_count, num_interpolation):
 
         tmp_x, tmp_y, tmp_t = [], [], []
 
@@ -93,10 +95,34 @@ class DrawSpline:
         return np.array(tmp_x), np.array(tmp_y), np.array(tmp_t)
 
     @staticmethod
+    def __distance_interpolation__(x, y, t, line_count, num_interpolation):
+
+        tmp_x, tmp_y, tmp_t = [], [], []
+        tmp_x.append(x[0])
+        tmp_y.append(y[0])
+        tmp_t.append(t[0])
+        total_distance = 0
+        for i in range(line_count - 1):
+            total_distance += math.dist([x[i], y[i]], [x[i + 1], y[i + 1]])
+        interval = total_distance / num_interpolation
+
+        tmp_dist = 0
+        for i in range(line_count - 1):
+            if math.dist([tmp_x[-1], tmp_y[-1]], [x[i + 1], y[i + 1]]) + tmp_dist > interval:
+                tmp_x.append(x[i])
+                tmp_y.append(y[i])
+                tmp_t.append(t[i])
+                tmp_dist = 0
+            else:
+                tmp_dist += math.dist([x[i], y[i]], [x[i + 1], y[i + 1]])
+
+        return np.array(tmp_x), np.array(tmp_y), np.array(tmp_t)
+
+    @staticmethod
     def print_poly_to_file(csv_file_name, output_file_name, num_interpolation):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
-        x, y, t = DrawSpline.__get_data__(x, y, t, line_count, num_interpolation)
+        x, y, t = DrawSpline.__distance_interpolation__(x, y, t, line_count, num_interpolation)
 
         spline_x = CubicSpline(t, x)
         spline_y = CubicSpline(t, y)
@@ -107,17 +133,16 @@ class DrawSpline:
             csv_file.write('t_start, t_stop, ax^3, bx^2, cx, d, ay^3, by^2, cy, d\n')
 
             for i in range(num_interpolation):
-
                 t_start = spline_x.x[i]
-                t_stop = spline_x.x[i+1]
+                t_stop = spline_x.x[i + 1]
                 x_poly = spline_x.c[:, i]
                 y_poly = spline_y.c[:, i]
 
-                csv_file.write(f'{t_start}, {t_stop}, {x_poly[0]}, {x_poly[1]}, {x_poly[2]}, {x_poly[3]}, {y_poly[0]}, {y_poly[1]}, {y_poly[2]}, {y_poly[3]}\n')
+                csv_file.write(
+                    f'{t_start}, {t_stop}, {x_poly[0]}, {x_poly[1]}, {x_poly[2]}, {x_poly[3]}, {y_poly[0]}, {y_poly[1]}, {y_poly[2]}, {y_poly[3]}\n')
 
             csv_file.flush()
             csv_file.close()
 
         except:
             traceback.print_exc()
-

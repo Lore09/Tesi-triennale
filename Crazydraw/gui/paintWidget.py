@@ -150,7 +150,7 @@ class paint(QtWidgets.QLabel):
         painter = QtGui.QPainter(self.pixmap())
 
         pen = painter.pen()
-        pen.setWidth(2)
+        pen.setWidth(3)
         pen.setColor(QtGui.QColor("#e82727"))
         painter.setPen(pen)
 
@@ -161,4 +161,4 @@ class paint(QtWidgets.QLabel):
         # Update the origin for next time.
         self.last_x = e.x()
         self.last_y = e.y()
-        self.csv_file.write(f'{str(self.last_x  / self.scale_size)}, {str((self.settings.get_screen_res().height()*2/3 - self.last_y) / self.scale_size)}, {str(time.time() - self.start_time)}\n')
+        self.csv_file.write(f'{(self.last_x - self.settings.get_paint_size_scaled()[0]/2 )/ self.scale_size}, {(self.settings.get_screen_res().height()*2/3 - (self.last_y + self.settings.get_paint_size_scaled()[1]/2 )) / self.scale_size}, {(time.time() - self.start_time)*2.5}\n')
