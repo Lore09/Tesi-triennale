@@ -31,7 +31,7 @@ class DrawSpline:
 
             figure.suptitle(message)
 
-            x1, = ax[0].plot(t, x, 'o', label='data')
+            x1, = ax[0].plot(t, x, 'o', label='int. points')
             x2, = ax[0].plot(t_full, spline_x(t_full), label="s(t)")
             x3, = ax[0].plot(t_full, spline_x(t_full, 1), label="v(t)")
             x4, = ax[0].plot(t_full, spline_x(t_full, 2), label="a(t)")
@@ -39,7 +39,7 @@ class DrawSpline:
             ax[0].set_ylabel("x")
             ax[0].set_xlabel("t (seconds)")
 
-            y1, = ax[1].plot(t, y, 'o', label='data')
+            y1, = ax[1].plot(t, y, 'o', label='int. points')
             y2, = ax[1].plot(t_full, spline_y(t_full), label="s(t)")
             y3, = ax[1].plot(t_full, spline_y(t_full, 1), label="v(t)")
             y4, = ax[1].plot(t_full, spline_y(t_full, 2), label="a(t)")
@@ -108,7 +108,7 @@ class DrawSpline:
 
         tmp_dist = 0
         for i in range(line_count - 1):
-            if math.dist([tmp_x[-1], tmp_y[-1]], [x[i + 1], y[i + 1]]) + tmp_dist > interval:
+            if tmp_dist > interval:
                 tmp_x.append(x[i])
                 tmp_y.append(y[i])
                 tmp_t.append(t[i])
