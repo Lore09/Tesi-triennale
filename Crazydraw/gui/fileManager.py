@@ -1,13 +1,10 @@
 import os
 
-from PyQt5 import QtWidgets
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from controller.spline import DrawSpline
 from gui.custom_dialogs import DeleteDialog
 from controller.utils import *
-from gui.splineWidget import SplineWidget
 
 
 class FileManager(QWidget):
@@ -96,8 +93,10 @@ class FileManagerDraw(FileManagerMain):
 
 class FileManagerSpline(FileManagerMain):
 
-    def __init__(self, rel_path):
-        super().__init__(rel_path)
+    def __init__(self, settings):
+        super().__init__(settings.get_trajectory_path())
+
+        self.file_manager_widget.treeview.setMinimumWidth(450)
 
         self.bttn_spline = QPushButton("SPLINE", self)
         self.bttn_spline.setDisabled(True)
@@ -109,8 +108,41 @@ class FileManagerSpline(FileManagerMain):
         self.bttn_save.setFixedHeight(70)
         self.toolbar.addWidget(self.bttn_save)
 
+        self.bttn_compare = QPushButton("COMPARE", self)
+        self.bttn_compare.setDisabled(True)
+        self.bttn_compare.setFixedHeight(70)
+        self.toolbar.addWidget(self.bttn_compare)
+
         self.bttn_delete.clicked.connect(self.delete_file)
         self.file_manager_widget.treeview.clicked.connect(self.on_clicked)
+
+        self.settings = settings
+
+
+        #slider
+        self.slider = DoubleSlider(orientation=Qt.Horizontal)
+        self.slider.setMaximum(5)
+        self.slider.setMinimum(0.2)
+        self.slider.setSingleStep(0.1)
+        self.slider.setValue(1)
+        self.slider.valueChanged.connect(self.scale_time)
+        self.time_scale = float(self.slider.value())
+
+        self.label = QLabel()
+        self.label.setText("Time scale = " + str(self.slider.value()))
+        self.label.setAlignment(Qt.AlignCenter)
+
+        layout = QtWidgets.QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addWidget(self.slider)
+
+        self.pagelayout.addLayout(layout)
+    
+    
+    def scale_time(self):
+        self.label.setText("Time scale = " + str(self.slider.value()))
+        self.time_scale = float(self.slider.value())
+        self.settings.set_time_scale(self.time_scale)
 
     def delete_file(self):
 
@@ -121,6 +153,8 @@ class FileManagerSpline(FileManagerMain):
             self.bttn_delete.setDisabled(True)
             self.bttn_spline.setDisabled(True)
             self.bttn_save.setDisabled(True)
+            self.bttn_compare.setDisabled(True)
+
 
     def on_clicked(self, index):
         self.selected_file = self.file_manager_widget.dirModel.fileInfo(index).absoluteFilePath()
@@ -129,10 +163,12 @@ class FileManagerSpline(FileManagerMain):
             self.bttn_delete.setDisabled(True)
             self.bttn_spline.setDisabled(True)
             self.bttn_save.setDisabled(True)
+            self.bttn_compare.setDisabled(True)
         else:
             self.bttn_delete.setDisabled(False)
             self.bttn_spline.setDisabled(False)
             self.bttn_save.setDisabled(False)
+            self.bttn_compare.setDisabled(False)
 
 
 class FileManagerRos(FileManagerMain):
@@ -145,7 +181,13 @@ class FileManagerRos(FileManagerMain):
         self.bttn_fly.setFixedHeight(70)
         self.toolbar.addWidget(self.bttn_fly)
 
-        self.bttn_fly.clicked.connect(self.delete_file)
+        self.toolbar.addWidget(QLabel("ID:"))
+        self.id_value = QLineEdit()
+        self.id_value.setText(str(0))
+        self.id_value.setFixedWidth(50)
+        self.toolbar.addWidget(self.id_value)
+
+        self.bttn_delete.clicked.connect(self.delete_file)
         self.file_manager_widget.treeview.clicked.connect(self.on_clicked)
 
     def delete_file(self):

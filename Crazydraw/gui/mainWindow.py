@@ -4,7 +4,7 @@ from gui.paintWidget import *
 from gui.settingsWindow import SettingsWidget
 from gui.rosWidget import *
 import controller.utils as util
-import gui.splineWidget
+from gui.splineWidget import *
 
 
 class MainWindow(QMainWindow):
@@ -55,7 +55,7 @@ class SplineWindow(QWidget):
         layout = QHBoxLayout()
         self.settings = settings
 
-        self.file_manager = FileManagerSpline(settings.get_trajectory_path())
+        self.file_manager = FileManagerSpline(settings)
         self.spline_widget = SplineWidget(settings)
 
         self.file_manager.bttn_spline.clicked.connect(self.plot_spline)

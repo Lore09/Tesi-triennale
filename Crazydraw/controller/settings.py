@@ -14,6 +14,7 @@ class SettingsParser:
         self.paint_widget_size = None
         self.screen_res = None
         self.enable_ros = None
+        self.time_scale = 1.0
         self.data = {}
 
         self.polynomials_path_new = None
@@ -163,3 +164,10 @@ class SettingsParser:
             msg.setInformativeText('Errore scrittura file settings.yaml')
             msg.setWindowTitle("Aiuto")
             msg.exec_()
+
+
+    def set_time_scale(self, value):
+        self.time_scale = value
+
+    def get_time_scale(self):
+        return self.time_scale
