@@ -14,10 +14,21 @@ class RosWidget(QWidget):
 
         top_toolbar = QHBoxLayout()
 
-        bttn_hover = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/drone.png"), "HOVER", self)
-        bttn_land = QPushButton("LAND", self)
-        top_toolbar.addWidget(bttn_hover)
-        top_toolbar.addWidget(bttn_land)
+        self.bttn_hover = QPushButton(QIcon(QDir.currentPath() + "/gui/res/icons/drone.png"), "HOVER", self)
+        self.bttn_land = QPushButton("LAND", self)
+        self.bttn_stop = QPushButton("STOP", self)
+        self.bttn_plot = QPushButton("PLOT", self)
+
+        top_toolbar.addWidget(self.bttn_hover)
+        top_toolbar.addWidget(QLabel("Height:"))
+        self.hover_height = QLineEdit()
+        self.hover_height.setFixedWidth(50)
+        self.hover_height.setText(str(1))
+        top_toolbar.addWidget(self.hover_height)
+        
+        top_toolbar.addWidget(self.bttn_land)
+        top_toolbar.addWidget(self.bttn_stop)
+        top_toolbar.addWidget(self.bttn_plot)
 
         layout.addLayout(top_toolbar)
         layout.addSpacing(100)

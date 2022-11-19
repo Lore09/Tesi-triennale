@@ -14,13 +14,15 @@ class DrawSpline:
         self.x, self.y = None, None
 
     @staticmethod
-    def plot_cubic_spline(csv_file_name, figure, ax, num_interpolation):
+    def plot_cubic_spline(csv_file_name, figure, ax, num_interpolation, time_scale):
 
         x, y, t, line_count = DrawSpline.get_cords(csv_file_name)
 
+        t = [value * time_scale for value in t]
+
         try:
             t_full = np.linspace(0, t[line_count - 1], 500)
-            x, y, t = DrawSpline.__distance_interpolation__(x, y, t, line_count, num_interpolation)
+            x, y, t = DrawSpline.__distance_interpolation__(x, y, t, line_count, 0.2)
 
             spline_x = CubicSpline(t, x)
             spline_y = CubicSpline(t, y)
@@ -95,20 +97,16 @@ class DrawSpline:
         return np.array(tmp_x), np.array(tmp_y), np.array(tmp_t)
 
     @staticmethod
-    def __distance_interpolation__(x, y, t, line_count, num_interpolation):
+    def __distance_interpolation__(x, y, t, line_count, interval):
 
         tmp_x, tmp_y, tmp_t = [], [], []
         tmp_x.append(x[0])
         tmp_y.append(y[0])
         tmp_t.append(t[0])
-        total_distance = 0
-        for i in range(line_count - 1):
-            total_distance += math.dist([x[i], y[i]], [x[i + 1], y[i + 1]])
-        interval = total_distance / num_interpolation
 
         tmp_dist = 0
         for i in range(line_count - 1):
-            if tmp_dist > interval:
+            if math.dist([tmp_x[-1], tmp_y[-1]], [x[i + 1], y[i + 1]]) + tmp_dist > interval:
                 tmp_x.append(x[i])
                 tmp_y.append(y[i])
                 tmp_t.append(t[i])
@@ -143,6 +141,38 @@ class DrawSpline:
 
             csv_file.flush()
             csv_file.close()
+
+        except:
+            traceback.print_exc()
+
+    @staticmethod
+    def spline_check( csv_file_name, time_scale):
+
+        x_raw, y_raw, t_raw, line_count = DrawSpline.get_cords(csv_file_name)
+
+        t_raw = [value * time_scale for value in t_raw]
+
+        try:
+
+            x, y, t = DrawSpline.__distance_interpolation__(x_raw, y_raw, t_raw, line_count, 0.2)
+            t_full = np.linspace(0, t[-1], 500)
+
+            spline_x = CubicSpline(t, x, bc_type='clamped')
+            spline_y = CubicSpline(t, y, bc_type='clamped')
+
+            plt.plot(x_raw, y_raw, color='r', label='raw data')
+            plt.plot(spline_x(t_full), spline_y(t_full), color='g', label='interpolated')
+
+            # Naming the x-axis, y-axis and the whole graph
+            plt.xlabel("X")
+            plt.ylabel("Y")
+            plt.title("Comparison between interpolated and raw data")
+
+            # Adding legend, which helps us recognize the curve according to it's color
+            plt.legend()
+
+            # To load the display window
+            plt.show()
 
         except:
             traceback.print_exc()

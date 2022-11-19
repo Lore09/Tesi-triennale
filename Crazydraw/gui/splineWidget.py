@@ -25,8 +25,11 @@ class SplineWidget(QWidget):
 
         self.layout = QVBoxLayout()
         self.setLayout(self.layout)
+    
+    def plot_comparison(self,file_name, time_scale):
+        DrawSpline.spline_check(file_name,time_scale)
 
-    def plot_spline(self, file_name):
+    def plot_spline(self, file_name, time_scale):
 
         if file_name is not None:
             self.layout.removeWidget(self.canvas)
@@ -36,7 +39,7 @@ class SplineWidget(QWidget):
             self.toolbar = NavigationToolbar(self.canvas)
 
             self.ax = []
-            x, y = DrawSpline.plot_cubic_spline(file_name, self.canvas.fig, self.canvas.axes, 30)
+            x, y = DrawSpline.plot_cubic_spline(file_name, self.canvas.fig, self.canvas.axes, 3, time_scale)
             self.ax.append(x)
             self.ax.append(y)
 
